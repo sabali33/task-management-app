@@ -1,0 +1,53 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: task-manager-app
+        working_dir: /var/www/html
+        expose:
+            - 9000
+        depends_on:
+            - db
+        volumes:
+            - .:/var/www/html
+            - ./storage:/var/www/html/storage
+        restart: always
+    db:
+        container_name: postgres-db
+        image: postgres:latest
+        environment:
+            - POSTGRES_USER=DB_USER
+            - POSTGRES_PASSWORD=DB_PASS
+            - POSTGRES_DB=DB
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        restart: always
+    nginx:
+        image: nginx:alpine
+        container_name: nginx-server
+        ports:
+            - "8000:80" # Map Nginx HTTP to localhost:8000
+        volumes:
+            - .:/var/www/html
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+    pgadmin:
+        container_name: pgadmin
+        image: dpage/pgadmin4:latest
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=PGADMIN_MAIL
+            - PGADMIN_DEFAULT_PASSWORD=PGADMIN_PW
+            - PGADMIN_CONFIG_ALLOW_SPECIAL_EMAIL_DOMAINS="yahoo.com"
+        ports:
+            - "5050:80"
+        restart: always
+        depends_on:
+            - db
+
+volumes:
+    postgres-data:
+
