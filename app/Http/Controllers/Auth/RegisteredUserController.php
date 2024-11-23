@@ -48,4 +48,13 @@ class RegisteredUserController extends Controller
 
         return redirect(route('dashboard', absolute: false));
     }
+
+    public function index(Request $request): Response
+    {
+        $users = User::all()->toArray();
+
+        return Inertia::render('User/index', [
+            'users' => $users
+        ]);
+    }
 }
