@@ -5,15 +5,28 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskListRequest;
 use App\Http\Requests\UpdateTaskListRequest;
 use App\Models\TaskList;
+use GuzzleHttp\Psr7\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class TaskListController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        return Inertia::render('Tasks/TaskList', [
+            'task_lists' =>  [
+                [
+                    'id' => 1,
+                    'firstName' =>"First List",
+                    'lastName' =>"First List",
+                    'start_date' => "Start date",
+                    'end_date' => "End date",
+                ],
+            ]
+        ]);
     }
 
     /**
@@ -21,7 +34,7 @@ class TaskListController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("Tasks/CreateForm");
     }
 
     /**
