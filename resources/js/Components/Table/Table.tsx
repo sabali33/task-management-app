@@ -1,25 +1,33 @@
-import React, {useState} from "react";
-import {Rows} from "@/Components/Rows";
-export const Table = ({data, tableHeaders}:{data: Array<[]>, tableHeader: string[]}) => {
-
-    return <>
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow">
-            <thead>
-            <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
-                <th className="py-3 px-6 text-left">Task Name</th>
-                <th className="py-3 px-6 text-left">Assignee</th>
-                <th className="py-3 px-6 text-center">Priority</th>
-                <th className="py-3 px-6 text-center">Status</th>
-                <th className="py-3 px-6 text-center">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {data.length > 0 && <Rows data={data}/>}
-            </tbody>
-        </table>
-        { data.length < 1 &&
-        <p className="text-center text-gray-500 mt-4">No tasks available.</p>
-        }
-            </>
-
-}
+import { JSX } from "react";
+import { TableHeader } from "@/Components/Table/TableHeader";
+import { ColumnType, RowItem } from "./RowItem";
+export const Table = ({
+    data,
+    tableHeader,
+    noDataLabel,
+}: {
+    data: Array<ColumnType[]>;
+    tableHeader: string[];
+    noDataLabel: string;
+}) => {
+    return (
+        <>
+            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow">
+                <thead>
+                    <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                        {<TableHeader headers={tableHeader} />}
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.length > 0 &&
+                        data.map((row, rowIndex) => {
+                            return <RowItem row={row} key={rowIndex} />;
+                        })}
+                </tbody>
+            </table>
+            {data.length < 1 && (
+                <p className="text-center text-gray-500 mt-4">{noDataLabel}</p>
+            )}
+        </>
+    );
+};
