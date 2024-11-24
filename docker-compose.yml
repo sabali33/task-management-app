@@ -39,8 +39,8 @@ services:
         container_name: pgadmin
         image: dpage/pgadmin4:latest
         environment:
-            - PGADMIN_DEFAULT_EMAIL=PGADMIN_MAIL
-            - PGADMIN_DEFAULT_PASSWORD=PGADMIN_PW
+            - PGADMIN_DEFAULT_EMAIL=sabalisfi@yahoo.com
+            - PGADMIN_DEFAULT_PASSWORD=root
             - PGADMIN_CONFIG_ALLOW_SPECIAL_EMAIL_DOMAINS="yahoo.com"
         ports:
             - "5050:80"
