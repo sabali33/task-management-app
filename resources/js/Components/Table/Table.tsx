@@ -11,7 +11,7 @@ export const Table = ({
 }) => {
     return (
         <>
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow">
+            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                 <thead>
                     <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
                         {<TableHeader headers={tableHeader} />}

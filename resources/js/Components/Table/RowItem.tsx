@@ -9,7 +9,7 @@ export const RowItem = ({ row }: { row: ColumnType[] }) => {
         const { text, rowActions, id } = column;
         return (
             <td
-                className="py-3 px-6 text-left whitespace-nowra"
+                className="py-3 px-6 text-left whitespace-nowrap"
                 key={`${id}-${colIndex}`}
             >
                 {text}

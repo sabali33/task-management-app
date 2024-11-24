@@ -51,10 +51,10 @@ class RegisteredUserController extends Controller
 
     public function index(Request $request): Response
     {
-        $users = User::all()->toArray();
-
         return Inertia::render('User/index', [
-            'users' => $users
+            'users' => User::all()->map(function(User $user){
+                return $user->only(['id', 'name', 'email']);
+            })->toArray()
         ]);
     }
 }

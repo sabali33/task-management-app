@@ -22,10 +22,16 @@ export const useTransformToTable = function ({
         rowActions?: InertiaLinkProps[];
     }) => {
         return rowActions?.map((action, index) => {
-            console.log(rowId);
             const actionRoute = action.href.replace("%s", String(rowId));
+            const colorClass =
+                action.method === "delete" ? "text-red-500" : "text-blue-500";
             return (
-                <Link {...action} href={actionRoute} key={index}>
+                <Link
+                    {...action}
+                    href={actionRoute}
+                    key={index}
+                    className={`${colorClass} px-6 py-2 rounded-lg hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-200`}
+                >
                     {action.title}
                 </Link>
             );
@@ -34,7 +40,6 @@ export const useTransformToTable = function ({
     useEffect(() => {
         const transformedUsers = [] as Array<ColumnType[]>;
         data.forEach((rowItem, index) => {
-            console.log(rowItem);
             const rowData: ColumnType[] = [];
             let lastColumnItem = 0;
             for (let prop in rowItem) {

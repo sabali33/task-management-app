@@ -56,7 +56,7 @@ export default function TaskList() {
                 createNewLink={
                     <Link
                         href="/task-list/create"
-                        className="p-6 bg-white"
+                        className="bg-blue-300 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         method="get"
                         preserveState
                     >
