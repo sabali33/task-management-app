@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shared_task_list_user', function (Blueprint $table) {
-            $table->id();
+        Schema::create('task_list_user', function (Blueprint $table) {
+
             $table->foreignId('task_list_id')->constrained('task_lists')->onDelete('cascade');
+            $table->enum('permission', ['edit', 'view']);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->timestamps();
+
+            $table->unique(['task_list_id', 'user_id']);
+
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shared_task_list_user');
+        Schema::dropIfExists('task_list_user');
     }
 };

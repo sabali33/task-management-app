@@ -11,7 +11,7 @@ class StoreTaskListRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreTaskListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'taskName' => 'required|unique:task_lists,name|max:70',
+            'description' => 'required|max:255',
+            'startDate' => 'required|date:after:yesterday',
+            'endDate' => 'required|date|after:startDate',
+            'status' => 'string|required'
         ];
     }
 }

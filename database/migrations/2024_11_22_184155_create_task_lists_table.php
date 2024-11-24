@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->enum('status', ['not_started', 'in_progress', 'completed']);
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

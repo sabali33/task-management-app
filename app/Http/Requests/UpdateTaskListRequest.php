@@ -11,7 +11,7 @@ class UpdateTaskListRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateTaskListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'taskName' => 'required|max:70',
+            'description' => 'required|max:255',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date',
+            'status' => ''
         ];
     }
 }

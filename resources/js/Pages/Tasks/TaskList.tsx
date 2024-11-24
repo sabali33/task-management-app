@@ -19,14 +19,13 @@ export default function TaskList() {
     const rowActions: Array<InertiaLinkProps> = [
         {
             href: "/task-list/%s/edit",
-            method: "put",
+            method: "get",
             as: "button",
             title: "Edit",
         },
         {
-            href: "/task-list/%s/view",
+            href: "/task-list/%s/show",
             method: "get",
-            as: "button",
             title: "View",
         },
         {
@@ -34,6 +33,11 @@ export default function TaskList() {
             method: "delete",
             as: "button",
             title: "Delete",
+        },
+        {
+            href: "/task-list/%s/share",
+            method: "get",
+            title: "Share",
         },
     ];
 
@@ -71,7 +75,6 @@ export default function TaskList() {
                                 "ID",
                                 "Name",
                                 "Description",
-                                "Task Count",
                                 "User",
                                 "Actions",
                             ]}
