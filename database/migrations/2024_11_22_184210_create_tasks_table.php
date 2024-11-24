@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('priority')->default('medium');
             $table->date('due_date')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Creator
-            $table->foreignId('assignee_id')->nullable()->constrained('users')->onDelete('set null'); // Assignee
+            $table->foreignId('assignee_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('task_list_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }
