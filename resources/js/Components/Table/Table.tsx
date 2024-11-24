@@ -1,4 +1,3 @@
-import { JSX } from "react";
 import { TableHeader } from "@/Components/Table/TableHeader";
 import { ColumnType, RowItem } from "./RowItem";
 export const Table = ({

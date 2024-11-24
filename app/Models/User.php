@@ -50,10 +50,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, 'user_id');
     }
+    public function assignedTasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'assignee_id');
+    }
+    public function tasksListCreated(): HasMany
+    {
+        return $this->hasMany(TaskList::class, 'user_id');
+    }
 
     public function sharedTasks(): BelongsToMany
     {
-        return $this->belongsToMany(TaskList::class, 'shared_task_list_user');
+        return $this->belongsToMany(TaskList::class)->using(TaskListUser::class);
     }
 
 }

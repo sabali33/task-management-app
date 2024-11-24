@@ -22,9 +22,10 @@ export const useTransformToTable = function ({
         rowActions?: InertiaLinkProps[];
     }) => {
         return rowActions?.map((action, index) => {
+            console.log(rowId);
             const actionRoute = action.href.replace("%s", String(rowId));
             return (
-                <Link href={actionRoute} key={index} title={action.title}>
+                <Link {...action} href={actionRoute} key={index}>
                     {action.title}
                 </Link>
             );
@@ -33,25 +34,29 @@ export const useTransformToTable = function ({
     useEffect(() => {
         const transformedUsers = [] as Array<ColumnType[]>;
         data.forEach((rowItem, index) => {
+            console.log(rowItem);
             const rowData: ColumnType[] = [];
-            let lastItem = index + 1 === data.length;
-            console.log(lastItem, index, data.length);
+            let lastColumnItem = 0;
             for (let prop in rowItem) {
+                lastColumnItem++;
                 rowData.push({
                     id: `col-${index}`,
                     text: rowItem[prop as keyof RowType] as string,
                 });
+                if (lastColumnItem === Object.values(rowItem).length) {
+                    rowData.push({
+                        id: `col-${index}-${rowItem.id}`,
+                        text: "",
+                        rowActions: (
+                            <RowActionsComponent
+                                rowActions={rowActions}
+                                rowId={rowItem.id as number}
+                            />
+                        ),
+                    });
+                }
             }
-            rowData.push({
-                id: "actiopn-row",
-                text: "",
-                rowActions: lastItem ? (
-                    <RowActionsComponent
-                        rowActions={rowActions}
-                        rowId={rowItem.id as number}
-                    />
-                ) : undefined,
-            });
+
             transformedUsers.push(rowData);
         });
         setTableData(transformedUsers);
