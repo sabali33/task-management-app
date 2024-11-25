@@ -1,66 +1,39 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## About this app
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This application is a small task management demo that is build on Laravel. It has the following features:
 
-## About Laravel
+-   A user password authentication
+-   Users can create a Task List (can be named project) and under each task list, sub tasks can be created
+-   Both Task List and sub task can be updated or deleted
+-   Users with the exception of the administrator and given access to update or delete their own tasks.
+-   Users can share their Task List.
+-   Users can view and toggles task list they shared with others.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Local Setup
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Setting this app locally is as simple as setting up any other Laravel application. You need to have Docker desktop and NodeJS install on your machine.
+These two requirements below are the steps to setup:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   Start your Docker daemon and run `docker compose up` to build and pull in relevant images and start containers
+-   Install composer packages by running `compose install` command.
+-   Migrate the database using `docker exec task-manager-app php artisan migrate` command. Check in the docker-compose.yml to confirm the container name
+-   Install node dependencies by running `npm install` command.
+-   Run `docker exec task-manager-app php artisan serve` to serve the app locally.
+-   Access the local address at: http://localhost:8000
 
-## Learning Laravel
+## Using the app.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-   On the homepage you are presented a login and register buttons. You can login using `test@examle.com` and `password`, after migrating the database.
+-   After login in you are taking to an empty dashboard page. Check on the menu at the top for any further interactions
+-   On the Users table you can see a list of users on the application. Next to the names are links to the Task Lists( Visible to only Admins)
+-   If you are not an Admin user you can go to your task lists by clicking on the blue button next to it.
+-   When you are on the task list page, you are presented the option to create a task list. If you have already done that, you should see a list of existing task lists.
+-   Next to the task lists you have created you can find, buttons to update, delete or share them with other users on the app.
+-   Lets say you want to share a task list. Click on the share button of that item.
+-   On the resulting page, you can see if you have already shared this task before. There is also a form towards the bottom for you to actually select users with whom you want to share the item.
+-   The field is type-hinted but only for users you already have not shared this task. To share with a user search the user and select the user from the suggested list.
+-   Below the text field you can indicate if you want the user to have an edit permission check it. Not checking it will give user a view permisson only
+-   Hitting the share button will share the task and a success notice is displayed
+-   The share would also appear in the shared list above the form.
+-   You can toggle the permission henceforth from there.
+-   Creating Task Lists and their sub task is straight forward.
