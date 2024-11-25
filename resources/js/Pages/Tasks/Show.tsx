@@ -38,6 +38,10 @@ export default function Show() {
         >
             <Head title="Task List Details" />
             <ContainerLayout>
+                <div className="py-5">
+                    <Link href="/task-list"> Back to all task list</Link>
+                </div>
+
                 <div className="w-full max-w-md bg-white rounded-lg">
                     <div className="mb-4">
                         <h2 className="text-sm font-medium text-gray-500 uppercase">
