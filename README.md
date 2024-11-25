@@ -14,11 +14,13 @@ This application is a small task management demo that is build on Laravel. It ha
 Setting this app locally is as simple as setting up any other Laravel application. You need to have Docker desktop and NodeJS install on your machine.
 These two requirements below are the steps to setup:
 
--   Start your Docker daemon and run `docker compose up` to build and pull in relevant images and start containers
+-   Copy the content of .env.example into a .env file.
 -   Install composer packages by running `compose install` command.
+-   Install node dependencies by running `npm install` comand.
+-   Run `npm run dev` to watch for script changes.
+-   Start your Docker daemon and run `docker compose up -d` to build and pull in relevant images and start containers
+-   Generate you app key by running this code: `docker exec task-manager-app php artisan key:generate`
 -   Migrate the database using `docker exec task-manager-app php artisan migrate` command. Check in the docker-compose.yml to confirm the container name
--   Install node dependencies by running `npm install` command.
--   Run `docker exec task-manager-app php artisan serve` to serve the app locally.
 -   Access the local address at: http://localhost:8000
 
 ## Using the app.
