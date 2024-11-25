@@ -1,7 +1,11 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, InertiaLinkProps, Link, usePage } from "@inertiajs/react";
 import { Table } from "@/Components/Table/Table";
-import { useTransformToTable } from "@/UseTransformToTable";
+import {
+    AppLinkPropsType,
+    RowType,
+    useTransformToTable,
+} from "@/UseTransformToTable";
 import { ContainerLayout } from "@/Layouts/ContainerLayout";
 
 type TaskListType = {
@@ -10,13 +14,15 @@ type TaskListType = {
     description: string;
     startDate: Date;
     endDate: Date;
+    can_edit: boolean;
 };
 export default function TaskList() {
     const { props } = usePage();
 
     const taskList = props.task_lists as TaskListType[];
+    const receivedTaskList = props.others as TaskListType[] | null;
 
-    const rowActions: Array<InertiaLinkProps> = [
+    const rowActions: AppLinkPropsType[] = [
         {
             href: "/task-list/%s/edit",
             method: "get",
@@ -37,14 +43,47 @@ export default function TaskList() {
         {
             href: "/task-list/%s/share",
             method: "get",
-            title: "Share",
+            title: "Shares",
         },
     ];
+    const rowActionFilter = (row: RowType) => {
+        const canEdit = row.can_edit as boolean;
 
-    const tableData = useTransformToTable({
+        return (actionRow: InertiaLinkProps) => {
+            if (canEdit) {
+                return true;
+            }
+            if (actionRow.title === "View") {
+                return true;
+            }
+            return false;
+        };
+    };
+
+    const tableDataForOwner = useTransformToTable({
         data: taskList,
         rowActions: rowActions,
     });
+    const tableDataForOther = receivedTaskList
+        ? useTransformToTable({
+              data: receivedTaskList,
+              rowActions: [
+                  {
+                      href: "/task-list/%s/edit",
+                      method: "get",
+                      as: "button",
+                      title: "Edit",
+                  },
+                  {
+                      href: "/task-list/%s/show",
+                      method: "get",
+                      title: "View",
+                  },
+              ],
+
+              rowActionFilter,
+          })
+        : null;
     return (
         <>
             <AuthenticatedLayout
@@ -68,9 +107,10 @@ export default function TaskList() {
                 <Head title="Task Lists" />
 
                 <ContainerLayout>
+                    <h2 className="py-6 text-xl">Your own task list</h2>
                     {
                         <Table
-                            data={tableData}
+                            data={tableDataForOwner}
                             tableHeader={[
                                 "ID",
                                 "Name",
@@ -82,6 +122,24 @@ export default function TaskList() {
                         />
                     }
                 </ContainerLayout>
+                {tableDataForOther && (
+                    <ContainerLayout>
+                        <h2 className="py-6 text-xl">Task List from others</h2>
+                        {
+                            <Table
+                                data={tableDataForOther}
+                                tableHeader={[
+                                    "ID",
+                                    "Name",
+                                    "Description",
+                                    "User",
+                                    "Actions",
+                                ]}
+                                noDataLabel={"No Task List available"}
+                            />
+                        }
+                    </ContainerLayout>
+                )}
             </AuthenticatedLayout>
         </>
     );

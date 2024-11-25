@@ -2,35 +2,60 @@ import { useEffect, useState } from "react";
 import { ColumnType } from "./Components/Table/RowItem";
 import { InertiaLinkProps, Link } from "@inertiajs/react";
 
-type RowType = { [prop: string]: unknown };
+export type RowType = { [prop: string]: unknown };
+/**
+ * T stands additional link props we may need
+ */
+export type AppLinkPropsType<T = true> = T extends true
+    ? InertiaLinkProps & RowType
+    : InertiaLinkProps;
+
 type TableDataProps = {
     data: Array<RowType>;
-    rowActions?: Array<InertiaLinkProps>;
+    rowActions?: Array<AppLinkPropsType>;
+    rowActionFilter?: (row: RowType) => (action: InertiaLinkProps) => boolean;
 };
 
 export const useTransformToTable = function ({
     data,
     rowActions,
+    rowActionFilter,
 }: TableDataProps) {
     const [tableData, setTableData] = useState<Array<ColumnType[]>>([]);
 
     const RowActionsComponent = ({
         rowId,
         rowActions,
+        filter,
+        rowData,
     }: {
         rowId: number;
-        rowActions?: InertiaLinkProps[];
+        rowActions?: AppLinkPropsType[];
+        filter?: (action: InertiaLinkProps) => boolean;
+        rowData?: { [props: string]: any };
     }) => {
-        return rowActions?.map((action, index) => {
+        let actionsEligibleForEditing = rowActions;
+        if (filter !== undefined) {
+            actionsEligibleForEditing = rowActions?.filter((rowAction) => {
+                return filter(rowAction);
+            });
+        }
+
+        return actionsEligibleForEditing?.map((action, index) => {
             const actionRoute = action.href.replace("%s", String(rowId));
             const colorClass =
                 action.method === "delete" ? "text-red-500" : "text-blue-500";
+
+            const applyData = action.applyData as Function;
+            const data = action.applyData ? applyData(rowData) : undefined;
+
             return (
                 <Link
                     {...action}
                     href={actionRoute}
                     key={index}
                     className={`${colorClass} px-6 py-2 rounded-lg hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-200`}
+                    data={data}
                 >
                     {action.title}
                 </Link>
@@ -56,6 +81,12 @@ export const useTransformToTable = function ({
                             <RowActionsComponent
                                 rowActions={rowActions}
                                 rowId={rowItem.id as number}
+                                filter={
+                                    rowActionFilter
+                                        ? rowActionFilter(rowItem)
+                                        : undefined
+                                }
+                                rowData={rowItem}
                             />
                         ),
                     });

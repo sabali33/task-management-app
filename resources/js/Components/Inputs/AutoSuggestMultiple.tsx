@@ -54,7 +54,7 @@ export const AutoSuggestMultiple = ({
                 htmlFor="multi-suggest"
                 className="block text-sm font-medium text-gray-700 mb-1"
             >
-                Select Frameworks
+                Select Users
             </label>
             <div className="flex flex-wrap gap-2 border border-gray-300 rounded-lg px-4 py-2">
                 {selectedValues.map((value) => (

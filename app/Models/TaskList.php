@@ -27,6 +27,6 @@ class TaskList extends Model
 
     public function sharedUsers()
     {
-        return $this->belongsToMany(User::class)->using(TaskListUser::class);
+        return $this->belongsToMany(User::class)->using(TaskListUser::class)->withPivot('permission');
     }
 }

@@ -30,7 +30,7 @@ export default function CreateTaskForm({ task }: { task?: TaskItemType }) {
 
     const task_lists = props.task_list as TaskListItemType[];
     const users = props.users as { id: number; name: string }[];
-    console.log(task_lists, users);
+
     const routePath = task ? `/task/${task.id}/update` : "/task/store";
 
     const title = task ? "Edit task" : "New Task";

@@ -1,7 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, InertiaLinkProps, Link, usePage } from "@inertiajs/react";
 import { Table } from "@/Components/Table/Table";
-import { useTransformToTable } from "@/UseTransformToTable";
+import { AppLinkPropsType, useTransformToTable } from "@/UseTransformToTable";
 
 type UserType = { firstName: string; lastName: string; id: number };
 
@@ -12,7 +12,7 @@ export default function Users() {
     }>();
     const users = props.users as Array<UserType>;
 
-    const rowActions: InertiaLinkProps[] = [
+    const rowActions: AppLinkPropsType[] = [
         {
             href: "/profile",
             method: "get",

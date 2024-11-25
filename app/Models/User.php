@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     public function sharedTasks(): BelongsToMany
     {
-        return $this->belongsToMany(TaskList::class)->using(TaskListUser::class);
+        return $this->belongsToMany(TaskList::class)->using(TaskListUser::class)->withPivot('permission');
     }
 
 }

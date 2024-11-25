@@ -12,6 +12,7 @@ use App\Services\TaskListShareService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,12 +27,37 @@ class TaskListController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return Inertia::render('Tasks/TaskList', [
-            'task_lists' =>  TaskList::all()->map(function (TaskList $taskListItem){
+        Auth::id();
+
+        if(Auth::id() !== 1){
+            $taskList = TaskList::where('user_id', Auth::id())->get()->map(function(TaskList $taskList){
+                return $taskList->only(['id', 'name', 'description', 'user_id']);
+
+            });
+
+            /**
+             * @var User $user
+             */
+            $user = User::find(Auth::id());
+            $othersTaskList = $user->sharedTasks()->get()->map(function(TaskList $taskList){
+                $taskList->toArray();
+                $taskListArr = $taskList->only(['id', 'name', 'description', 'user_id']);
+                $taskListArr['can_edit'] = $taskList->toArray()['pivot']['permission'] === 'edit';
+                return $taskListArr;
+            })->toArray();
+
+        }else{
+            $taskList = TaskList::all()->map(function (TaskList $taskListItem){
                 return $taskListItem->only([ 'id', 'name', 'description', 'user_id']);
-            })->toArray()
+            })->toArray();
+            $othersTaskList = null;
+        }
+
+        return Inertia::render('Tasks/TaskList', [
+            'task_lists' =>  $taskList,
+            'others' => $othersTaskList
         ]);
     }
 
@@ -133,11 +159,27 @@ class TaskListController extends Controller
 
     public function share(int $task_list_id)
     {
+        /**
+         * @var TaskList $task
+         */
+        $task = TaskList::find($task_list_id);
+
+        $shared_users = $task->sharedUsers()->get()->map(function(User $user){
+            $pivot = $user->toArray()['pivot'];
+            return [
+                'id' => $user->getAttributeValue('id'),
+                'name' => $user->getAttributeValue('name'),
+                'permission' => $pivot['permission']
+            ];
+        });
+        $exclude_users = $shared_users->pluck('id')->toArray();
+        //dd($exclude_users);
         return Inertia::render('Tasks/Share', [
-            'task_list' => TaskList::find($task_list_id),
-            'users' => User::all()->map(function(User $user){
+            'task_list' => $task,
+            'users' => User::all()->whereNotIn('id',  $exclude_users, true)->map(function(User $user){
                 return $user->only(['id', 'name']);
-            })
+            }),
+            'shared_users' => $shared_users,
         ]);
     }
 
@@ -145,9 +187,19 @@ class TaskListController extends Controller
     {
         try {
             $task_list = $this->taskListShareService->share($task_list_id, $request, $this->taskListService);
+            $share_users = $task_list->sharedUsers()->get()->map(function(User $user){
+                $pivot = $user->toArray()['pivot'];
+                return [
+                    'id' => $user->getAttributeValue('id'),
+                    'name' => $user->getAttributeValue('name'),
+                    'permission' => $pivot['permission']
+                ];
+            });
+            $exclude_users = $share_users->pluck('id')->toArray();
             return Inertia::render('Tasks/Share', [
                 'task_list' => $task_list,
-                'users' => User::all()->map(function(User $user){
+                'shared_users' => $share_users,
+                'users' => User::all()->whereNotIn('id', $exclude_users, true)->map(function(User $user){
                     return $user->only(['id', 'name']);
                 })
             ]);
