@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Models\TaskList;
 use http\Exception\RuntimeException;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TaskListShareService
 {
@@ -31,8 +29,6 @@ class TaskListShareService
 
         $alreadyShare = $task_list->sharedUsers()->where('user_id', $eligible_users)->exists();
 
-        //$permissionExists = $task_list->sharedUsers()->wherePivot('permission', '=', $permission)->get();
-
         if($alreadyShare){
             $existingPermission = $requestData['can_edit'];
 
@@ -41,7 +37,7 @@ class TaskListShareService
             }
 
             $permission = $existingPermission ? 'edit' : 'view';
-            //dd($permission);
+
             foreach($eligible_users as $user_id){
                 $task_list->sharedUsers()->updateExistingPivot($user_id, ['permission' => $permission]);
             }

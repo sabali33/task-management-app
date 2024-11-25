@@ -9,7 +9,6 @@ use App\Models\TaskList;
 use App\Models\User;
 use App\Services\TaskListService;
 use App\Services\TaskListShareService;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -173,7 +172,7 @@ class TaskListController extends Controller
             ];
         });
         $exclude_users = $shared_users->pluck('id')->toArray();
-        //dd($exclude_users);
+
         return Inertia::render('Tasks/Share', [
             'task_list' => $task,
             'users' => User::all()->whereNotIn('id',  $exclude_users, true)->map(function(User $user){
