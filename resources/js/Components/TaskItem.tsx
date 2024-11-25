@@ -1,6 +1,6 @@
 import { TaskItemType } from "@/Pages/Tasks/Show";
 import { AppLinkPropsType, useTransformToTable } from "@/UseTransformToTable";
-import { InertiaLinkProps, Link } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import { Table } from "./Table/Table";
 
 export const TaskItem = ({ tasks }: { tasks: TaskItemType[] }) => {

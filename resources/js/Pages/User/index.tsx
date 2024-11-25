@@ -1,7 +1,11 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, InertiaLinkProps, Link, usePage } from "@inertiajs/react";
 import { Table } from "@/Components/Table/Table";
-import { AppLinkPropsType, useTransformToTable } from "@/UseTransformToTable";
+import {
+    AppLinkPropsType,
+    RowType,
+    useTransformToTable,
+} from "@/UseTransformToTable";
 
 type UserType = { firstName: string; lastName: string; id: number };
 
@@ -11,13 +15,8 @@ export default function Users() {
         auth: { user: { name: string; id: number; email: string } };
     }>();
     const users = props.users as Array<UserType>;
-
+    const { user } = props.auth;
     const rowActions: AppLinkPropsType[] = [
-        {
-            href: "/profile",
-            method: "get",
-            title: "View Profile",
-        },
         {
             href: "/task-list",
             method: "get",
@@ -25,7 +24,20 @@ export default function Users() {
         },
     ];
 
-    const tableData = useTransformToTable({ data: users, rowActions });
+    const rowActionFilter = (row: RowType) => {
+        return (action: InertiaLinkProps) => {
+            if (user.id === 1) {
+                return true;
+            }
+            return user.id === row.id;
+        };
+    };
+
+    const tableData = useTransformToTable({
+        data: users,
+        rowActions,
+        rowActionFilter,
+    });
     return (
         <>
             <AuthenticatedLayout
