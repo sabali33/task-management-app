@@ -59,6 +59,7 @@ export const TaskItem = ({ tasks }: { tasks: TaskItemType[] }) => {
                         "status",
                         "assignee",
                         "creator",
+                        "user_id",
                         "Actions",
                     ]}
                     data={tableData}
