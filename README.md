@@ -37,3 +37,7 @@ These two requirements below are the steps to setup:
 -   The share would also appear in the shared list above the form.
 -   You can toggle the permission henceforth from there.
 -   Creating Task Lists and their sub task is straight forward.
+
+Note.
+
+When configuring Postgres databse, manually specify the connection email address and password
